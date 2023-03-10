@@ -29,6 +29,32 @@ def get_random_book():
         book_number = url.split('/')[-1]
     return book_number, title
 
+def retrieve_book(book_number,title):
+    #create an irregular_library folder
+    if not os.path.exists('irregular_library'):
+        os.makedirs('irregular_library')
+
+    #url to books text file
+    url = f'https://www.gutenberg.org/cache/epub/{book_number}/pg{book_number}.txt'
+    
+    #error check book exists
+    try:
+        with urllib.request.urlopen(url) as response:
+            response.status_code = 200
+    except urllib.error.HTTPError as e:
+        print(f"Error: book with number {book_number} does not exist as a text file")
+        return
+    
+    #download books text file and add it to the irregular_libray
+    response = urllib.request.urlopen(url)
+    file_name = f"irregular_library/{title}.txt"
+    if not os.path.exists(file_name):
+        with open(file_name, 'w+', encoding='utf-8') as file:
+            file.write(response.read().decode('utf-8'))
+    
+        print(f"{title} has been saved")
+
+
 #create a folder to store the daily uploads if it doesn't exist
 if not os.path.exists('daily_uploads'):
     os.mkdir('daily_uploads')
@@ -73,5 +99,6 @@ os.remove('today.rss')
 book_number, title = get_random_book()
 if book_number is not None:
     print(f"Book of the day for {today} is {title}: {book_number}")
+    retrieve_book(book_number, title)
 else:
     print("Error getting book number")
