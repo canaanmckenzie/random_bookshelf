@@ -34,6 +34,9 @@ def retrieve_book(book_number,title):
     if not os.path.exists('irregular_library'):
         os.makedirs('irregular_library')
 
+    if not os.path.exists(f'irregular_library/{today}'):
+        os.makedirs(f'irregular_library/{today}')
+
     #url to books text file
     url = f'https://www.gutenberg.org/cache/epub/{book_number}/pg{book_number}.txt'
     
@@ -47,7 +50,7 @@ def retrieve_book(book_number,title):
     
     #download books text file and add it to the irregular_libray
     response = urllib.request.urlopen(url)
-    file_name = f"irregular_library/{title}.txt"
+    file_name = f"irregular_library/{today}/{title}.txt"
     if not os.path.exists(file_name):
         with open(file_name, 'w+', encoding='utf-8') as file:
             file.write(response.read().decode('utf-8'))
