@@ -13,7 +13,7 @@ def get_random_book():
     if not os.path.exists(file_name):
         print(f"error: 'file_name' does not exist")
         return None
-    with open(file_name,'r') as file:
+    with open(file_name,'r',encoding='utf',errors='ignore') as file:
         lines = file.readlines()
     
     #pick a random line from the file
@@ -52,7 +52,7 @@ def retrieve_book(book_number,title):
     response = urllib.request.urlopen(url)
     file_name = f"irregular_library/{today}/{title}.txt"
     if not os.path.exists(file_name):
-        with open(file_name, 'w+', encoding='utf-8') as file:
+        with open(file_name, 'w+', encoding='utf-8',errors='ignore') as file:
             file.write(response.read().decode('utf-8'))
     
         print(f"{title} has been saved")
@@ -75,7 +75,7 @@ today = date.today().strftime('%Y-%m-%d');
 #open a text file to store the book title and urls
 file_name = f'daily_uploads/{today}.txt'
 
-with open(file_name, 'w+') as file:
+with open(file_name, 'w+',encoding='utf-8',errors='ignore') as file:
     #find <items>
     items = root.findall('channel/item')
 
